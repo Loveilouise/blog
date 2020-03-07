@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"/>
+    <meta name="renderer" content="webkit"/>
+    <link rel="shortcut icon" href="./static/image/logo.png"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+    <title>主页</title>
+    <!-- Bootstrap -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/highlight.js/9.9.0/styles/xcode.min.css" rel="stylesheet"/>
+    <link href="./static/user/css/style.css" rel="stylesheet"/>
+
+
+    <style>
+        body {
+            background: #f7f7f7;
+        }
+
+        .post_item {
+            padding: 35px;
+            background: #ffffff;
+            margin-bottom: 35px;
+            /*position: relative;*/
+            /*overflow: hidden;*/
+        }
+    </style>
+</head>
+
+<body>
+
+<header id="header" class="header bg-white">
+    <div class="navbar-container">
+        <a href="index.html" class="navbar-logo">
+            <img src="./static/image/logo.png" alt="首页"/>
+        </a>
+        <div class="navbar-menu">
+            <a href="archives.html">归档</a>
+            <a href="about.html">关于</a>
+        </div>
+    </div>
+</header>
+<div class="container">
+    <div class="index-page clearfix">
+        <div class="row">
+            <div id="article">
+                <div id="post_item" class="text-left post_item">
+                    <a href="http://www.baidu.com">
+                        <h1>Bootstrap使用指南</h1>
+                    </a>
+                    <div class="post_content">
+                        <p>
+                            Bootstrap是美国Twitter公司的设计师Mark Otto和Jacob Thornton合
+                        </p>
+                        <p>
+                            更新时间：2019年4月26日19:42:33
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <nav class="text-center">
+                <ul class="pagination" id="paging_toolbar">
+                    <li><a href="#" aria-label="Previous"><span aria-hidden="true">上一页</span></a></li>
+                    <li class="active"><a href="#">1<span class="sr-only">(current)</span></a></li>
+                    <li class=""><a href="#">2<span class="sr-only">(current)</span></a></li>
+                    <li class=""><a href="#">3<span class="sr-only">(current)</span></a></li>
+                    <li class=""><a href="#">4<span class="sr-only">(current)</span></a></li>
+                    <li class=""><a href="#">5<span class="sr-only">(current)</span></a></li>
+                    <li class="disabled"><a href="#" aria-label="Previous"><span
+                            aria-hidden="true">下一页</span></a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<footer class="footer bg-white">
+    <div class="footer-meta">
+        <div class="footer-container">
+            <div class="meta-item meta-copyright">
+                <div class="meta-copyright-info">
+                    <div class="info-text">
+                        <p>
+                            &copy; 版权所有
+                            <a href="#" target="_blank" rel="nofollow">我的博客</a>
+                            保留一切权利
+                        </p>
+                        <br/>
+                        <p>备1111号</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</footer>
+<script src="./vendor/jquery/jquery.min.js"></script>
+<script src="./vendor/base.js"></script>
+<script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    $(function () {
+        loadPage(1);
+    });
+
+    /**
+     * 加载分页数据
+     * @param currentPage 当前分页
+     */
+    function loadPage(currentPage) {
+    	 
+        $.get(getRootPath() + '/index.do?currentPage='+currentPage, function (result) {
+        	 
+            if (result.code === "200") {
+                var articles = "";
+               
+                for (var i = 0; i < result.data.length; i++) {
+                    var article = result.data[i];
+                    articles += "<div id=\"post_item\" class='post_item'>\n" +
+                        "                <a href='post.html?aid=" + article.aid + "'>\n" +
+                        "                <h1>" + article.title + "</h1>\n" +
+                        "                </a>\n" +
+                        "                <div class=\"post_content\">\n" +
+                        "                    <p>\n"  + article.intro +
+                        "                    </p>\n" +
+                        "                        <p>\n" +
+                        "                            更新时间：" + article.created +
+                        "                        </p>\n" +
+                        "                </div>\n" +
+                        "            </div>";
+                }
+                $("#article").html(articles);
+                
+         
+
+                //分页条
+                var $paging_toolbar = $("#paging_toolbar");
+                var paging_toolbarTxt = "<li class='disabled'><a href='#'>第" + result.page.currentPage + "页 / 共" + result.page.pageTotal + "页</a></li>";
+
+                //如果当前是第一页，那么【上一页】按钮不可点击
+                if (currentPage == 1) {
+                    paging_toolbarTxt += "<li class='disabled'><a href='#'>上一页</a></li>";
+                } else {
+                    paging_toolbarTxt += "<li onclick='loadPage(" + (currentPage - 1) + ")'><a href='#'>上一页</a></li>";
+                }
+                //遍历生成页码
+                for (var i = 1; i <= result.page.pageTotal; i++) {
+                    if (result.data.currentPage === i) {
+                        paging_toolbarTxt += "<li onclick='loadPage(" + i + ")' class='active'><a href='#'>" + i + "</a></li>";
+                    } else {
+                        paging_toolbarTxt += "<li onclick='loadPage(" + i + ")' ><a href='#'>" + i + "</a></li>";
+                    }
+                }
+                //如果当前是最后一页，那么【下一页】按钮不可点击
+                if (currentPage == result.page.pageTotal) {
+                    paging_toolbarTxt += "<li class='disabled'><a href='#'>下一页</a></li>";
+                } else {
+                    paging_toolbarTxt += "<li onclick='loadPage(" + (currentPage + 1) + ")'><a href='#'>下一页</a></li>";
+                }
+                $paging_toolbar.html(paging_toolbarTxt);
+            } else {
+                alert(result.msg || '获取文章列表失败');
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"/>
+    <meta name="renderer" content="webkit"/>
+    <link rel="shortcut icon" href="../static/image/logo.png"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+    <title>主页</title>
+    <!-- Bootstrap -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/user/css/style.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../vendor/editor/css/editormd.css"/>
+
+    <style>
+        .label {
+            margin-left: 10px;
+        }
+
+        .comment-container {
+            padding-top: 30px;
+
+        }
+
+        .comment_list {
+            background: white;
+            margin: 0 auto;
+            padding: 0 20px
+        }
+    </style>
+</head>
+<body>
+<header id="header" class="header bg-white">
+    <div class="navbar-container">
+        <a href="index.html" class="navbar-logo">
+            <img src="../static/image/logo.png" alt="首页"/>
+        </a>
+        <div class="navbar-menu">
+            <a href="archives.html">归档</a>
+            <a href="about.html">关于</a>
+        </div>
+    </div>
+</header>
+<div class="container main-content post-page">
+    <div class="row">
+        <div class="text-center col-md-12">
+            <h1 id="title">Markdown转HTML的显示处理之自定义 ToC 容器</h1>
+            <p id="other"></p>
+            <div id="categorie_list">
+                <span class="label label-success">HTML</span>
+                <span class="label label-success">Java</span>
+            </div>
+        </div>
+        <div id="post_content" class="col-lg-8">
+            <textarea style="display:none;">###测试数据</textarea>
+        </div>
+        <p class="text-center">
+            本站文章除注明转载/出处，均为本站原创，转载前请务必署名
+        </p>
+    </div>
+</div>
+<div class="comment-container">
+    <div class="container">
+        <div class="row">
+           <!--  <div class="clearfix">
+                <form method="post" id="comment_form" class="comment-form" role="form"
+                      onsubmit="return subComment();">
+                    <input type="text" name="author" maxlength="12" id="comment_author"
+                           class="form-control input-control clearfix"
+                           placeholder="姓名 (*)"/>
+                    <textarea name="text" id="comment_content" class="form-control" placeholder="以上信息可以为空,评论不能为空哦!"
+                              required="required" minlength="5"
+                              maxlength="2000"></textarea>
+                    <button type="submit" class="submit" id="misubmit">提交</button>
+                </form>
+                <div class="text-center" id="comment_forbid">
+                    <span class="response">评论已关闭</span>
+                </div>
+            </div> -->
+
+            <div id="comment" class="comment-form">
+                <div id="comment_list" class="comment_list">
+                   
+                </div>
+                <nav class="pull-right">
+                    <ul class="pagination" id="paging_toolbar">
+                        <li><a href="#" aria-label="Previous"><span aria-hidden="true">上一页</span></a></li>
+                        <li class="active"><a href="#">1<span class="sr-only">(current)</span></a></li>
+                        <li class=""><a href="#">2<span class="sr-only">(current)</span></a></li>
+                        <li class=""><a href="#">3<span class="sr-only">(current)</span></a></li>
+                        <li class=""><a href="#">4<span class="sr-only">(current)</span></a></li>
+                        <li class=""><a href="#">5<span class="sr-only">(current)</span></a></li>
+                        <li class="disabled"><a href="#" aria-label="Previous"><span
+                                aria-hidden="true">下一页</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--所有页面必须导入start-->
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/base.js"></script>
+<!--所有页面必须导入end-->
+
+<script src="../vendor/url.param.js"></script>
+
+<script src="../vendor/editor/lib/marked.min.js"></script>
+<script src="../vendor/editor/lib/prettify.min.js"></script>
+
+<script src="../vendor/editor/lib/raphael.min.js"></script>
+<script src="../vendor/editor/lib/underscore.min.js"></script>
+<script src="../vendor/editor/lib/sequence-diagram.min.js"></script>
+<script src="../vendor/editor/lib/flowchart.min.js"></script>
+<script src="../vendor/editor/lib/jquery.flowchart.min.js"></script>
+<script src="../vendor/editor/editormd.js"></script>
+<script>
+    $(function () {
+        //获取文章ID
+        var aid = getUrlParam("aid");
+        //获取文章信息
+        $.get(getRootPath() + "/bacc.do?aid=" + aid, function (result) {
+            $("#title").text(result.data.article.title);
+            $("#other").text("发布于" + result.data.article.created);
+            //alert(result.data.categorylist.length);
+            //分类列表-----------------------------------------------------
+            var categorie_listTxt = "";
+            
+            for (var i = 0; i < result.data.categorylist.length; i++) {
+             
+                categorie_listTxt += "<span class=\"label label-success\">#" +  result.data.categorylist[i].name+ "</span>";
+            }
+            $("#categorie_list").html(categorie_listTxt);
+
+
+            /* var comment_form = $("#comment_form");
+            var comment_forbid = $("#comment_forbid");
+
+            //评论是否关闭
+            if (result.data.article.allow_comments == "1") {
+                comment_forbid.remove();
+                
+            } else{
+                comment_form.remove();
+            } */
+            var post_content_View = editormd.markdownToHTML("post_content", {
+                markdown: result.data.article.content,
+                htmlDecode: "style,script,iframe",
+                emoji: true,
+                taskList: true,
+                tex: true,  // 默认不解析
+                flowChart: true,  // 默认不解析
+                sequenceDiagram: true  // 默认不解析
+            });
+        });
+        loadCommentPage(aid, 1);
+    });
+    
+    /* var tale = new $.tale(); */
+
+   /*  function subComment() {
+        var comment_author = $("#comment_author").val();
+        var comment_content = $("#comment_content").val();
+        var aid = getUrlParam("aid");
+        $.post(getRootPath() + "/subComment.do", "aid=" + aid + "&content=" + comment_content + "&author=" + comment_author, function (result) {
+            if (result.code == "200") {
+               // location.href = getRootPath() + "/post.html?aid=" + aid;
+            	 tale.alertError("评论成功！");
+            } else {
+                tale.alertError(result.msg || '评论失败');
+            }
+        }, "json");
+    } */
+
+
+    /**
+     * 分页加载评论数据
+     * @param aid 文章id
+     * @param currentPage 页码
+     */
+     function loadCommentPage(aid, currentPage) {
+        //获取文章评论信息
+        $.get(getRootPath() + "/commentlist.do", "aid=" + aid + "&currentPage=" + currentPage, function (result) {
+            //没有评论
+             if (result.code == "600") {
+                $("#comment").remove();
+                return;
+            } 
+          
+            //文章评论内容
+            var comment_listTxt = "";
+            for (var i = 0; i < result.data.length; i++) {
+                var comment = result.data[i];
+                comment_listTxt += "<div>\n" +
+                    "                    <h3>" + comment.author + "</h3>\n" +
+                    "                    <p>" + comment.content + "</p>\n" +
+                    "                    <span>" +comment.created+ "</span>\n" +
+                    "               <hr/> </div>";
+            }
+            $("#comment_list").html(comment_listTxt);
+
+
+            //分页条
+            var $paging_toolbar = $("#paging_toolbar");
+            var paging_toolbarTxt = "<li class='disabled'><a href='#'>第" + result.page.currentPage + "页 / 共" + result.page.pageTotal + "页</a></li>";
+
+            //如果当前是第一页，那么【上一页】按钮不可点击
+            if (currentPage == 1) {
+                paging_toolbarTxt += "<li class='disabled'><a href='#'>上一页</a></li>";
+            } else {
+                paging_toolbarTxt += "<li onclick='loadCommentPage(" + aid + "," + (currentPage - 1) + ")'><a href='#'>上一页</a></li>";
+            }
+            //遍历生成页码
+            for (var i = 1; i <= result.page.pageTotal; i++) {
+                if (result.page.currentPage == i) {
+                    paging_toolbarTxt += "<li onclick='loadCommentPage(" + aid + "," + i + ")' class='active'><a href='#'>" + i + "</a></li>";
+                } else {
+                    paging_toolbarTxt += "<li onclick='loadCommentPage(" + aid + "," + i + ")' ><a href='#'>" + i + "</a></li>";
+                }
+            }
+            //如果当前是最后一页，那么【下一页】按钮不可点击
+            if (currentPage == result.page.pageTotal) {
+                paging_toolbarTxt += "<li class='disabled'><a href='#'>下一页</a></li>";
+            } else {
+                paging_toolbarTxt += "<li onclick='loadCommentPage(" + aid + "," + (currentPage + 1) + ")'><a href='#'>下一页</a></li>";
+            }
+            $paging_toolbar.html(paging_toolbarTxt);
+
+        }); 
+    } 
+</script>
+</body>
+
+</html>

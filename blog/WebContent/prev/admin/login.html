@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>用户登录</title>
+    <meta charset="utf-8">
+    <link rel="SHORTCUT ICON" href="../static/image/logo.png">
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/base.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "微软雅黑";
+            font-size: 12px;
+        }
+
+        .box {
+            width: 390px;
+            height: 360px;
+            border: solid 1px #ddd;
+            background: #FFF;
+            position: absolute;
+            left: 50%;
+            top: 42%;
+            margin-left: -195px;
+            margin-top: -160px;
+        }
+
+        .box h2 {
+            font-weight: normal;
+            color: #666;
+            font-size: 16px;
+            line-height: 46px;
+            height: 46px;
+            overflow: hidden;
+            text-align: center;
+            border-bottom: solid 1px #ddd;
+            background: #f7f7f7;
+        }
+
+        .input_box {
+            width: 350px;
+            padding-bottom: 15px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .input_box input {
+            float: left;
+            width: 348px;
+            height: 40px;
+            font-size: 14px;
+            border: solid 1px #ddd;
+            text-indent: 10px;
+            outline: none;
+            line-height: 40px;
+        }
+
+        .input_box button {
+            width: 350px;
+            height: 48px;
+            background: #3f89ec;
+            border: none;
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #FFF;
+        }
+
+        #error_box {
+            height: 40px;
+            width: 350px;
+            margin: 0 auto;
+            line-height: 40px;
+            color: #fc4343;
+        }
+
+        img {
+            height: 40px;
+            width: 100px;
+        }
+    </style>
+    <script>
+    
+    	 
+ 
+    
+    
+    
+    $(document).ready(
+       function (){
+    	   $("#login").click(function(){
+    		   var  verifyCode=$("#verify").val();
+    		   var  username=$("#username").val();
+    		   var  password=$("#password").val();
+    		  
+    		   $.get(getRootPath() + '/verify.do?verifyCode='+verifyCode, function (result) {
+        	     //拿到的result是一个json格式的字符串
+        	    // alert(result.code);
+        	     //alert(result.msg);
+        	     if(result.code=="600"){
+        	    	 $("#verify").val("");
+        	    	 $("#login_error").html(result.msg);
+        	    	 $("#code").attr("src", getRootPath() + "/kaptcha");
+        	     }else{
+        	    	 $.get(getRootPath() + '/login.do?username='+username+'&password='+password, function (result) {
+        		    	 if(result.code=="200"){
+        		    		 window.location.href=getRootPath()+"/prev/admin/index.html";
+        		    	 }else{
+        		    		 $("#username").val("");
+        		    		 $("#password").val("");
+        		    		 $("#verify").val("");
+        		    		 $("#code").attr("src", getRootPath() + "/kaptcha");
+        		    		 $("#login_error").html(result.msg);
+        		    	 }
+        		     });
+        	     }
+    		   } ); 
+    		   
+    	   });
+    	   
+    	   
+    	   
+    	   
+       }
+     );   
+    
+    
+    
+    
+    </script>
+    
+    
+    
+    
+    
+    
+    
+</head>
+<body>
+<!--中间登录-->
+    <div class="box">
+        <h2>登录</h2>
+        <div id="error_box"></div>
+        <div class="input_box">
+            <input type="text" id="username" value="admin" placeholder="请输入账户名" name="username"/>
+        </div>
+        <div class="input_box">
+            <input type="password" id="password" value="123" placeholder="请输入密码" name="password"/>
+        </div>
+        <div class="input_box">
+            <input type="text" name="verify" placeholder="请输入验证码" id="verify" style="width: 248px;"/>
+            <img id="code"   src="../../kaptcha"   onclick="image(this)"
+                 class="verify_image" />
+        </div>
+        <div class="input_box">
+            <button  id="login">登录</button>
+            <span class="error" id="login_error"  style="color:red"> </span>
+        </div>
+    </div>
+
+<script>
+
+
+</script>
+</body>
+
+
+
+<!-- 
+    $(function () {
+        $('#code').attr("src", getRootPath() + "/kaptcha.jpg");
+    });
+    function login() {
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var verify = $('#verify').val();
+        if (check(username,password,verify)) {
+            $.post(getRootPath() + "/login.do", "verify="+verify+"username=" + username + "&password=" + password, function (result) {
+                if (result.code === 200) {
+                    location.href = getRootPath() + "/admin/index.html";
+                } else {
+                    error.innerHTML = result.msg;
+                }
+            }, "json");
+        }
+    }
+
+    /**
+     * [[登录校验函数]]
+     * @param {DOM} form [[由页面传入，表单元素]]
+     */
+    function check(username, password,verify) {
+        var error = document.getElementById("login_error");
+        return _validate(username, error, "请输入用户名") && _validate(password, error, "请输入密码")
+            && _validate(verify, error, "请输入验证码") && _checkVerify(verify, error, "验证码不正确");
+    }
+
+    /**
+     * [[校验一个元素是否为空]]
+     * @param {[[DOM]]} element [[被校验的元素]]
+     * @param {[[DOM]]} error   [[错误信息显示]]
+     * @param {[[String]]} message [[错误信息]]
+     * @returns {[[boolean]]} [[返回是否通过]]
+     */
+    function _validate(element, error, message) {
+        var ele_value = element.trim();
+        if (ele_value == "") {
+            error.innerHTML = message;
+            element.focus();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * ajax请求校验验证码
+     * @param {} element 验证码input元素
+     * @param {} error 错误显示span
+     * @param {} message错误提示信息
+     */
+    function _checkVerify(element, error, message) {
+        var value = element.trim();
+        //是否成功
+        var hasSuccess = false;
+        $.ajax({
+            url: getRootPath() + "/verify.action",
+            data: "verify=" + value,
+            async: false,
+            dataType: "json",
+            success: function (result) {
+                if (result.code === 200) {
+                    hasSuccess = true;
+                } else {
+                    error.innerHTML = message;
+                }
+            }
+        });
+        return hasSuccess;
+    }
+
+    /**
+     * 换验证码
+     * @param {验证码所在的img DOM元素} image
+     */
+    function image(image) {
+        // image.src = "image.jsp?" + Math.random();
+        image.src = getRootPath() + "/kaptcha.jpg"
+    }
+
+
+ -->
+</html>

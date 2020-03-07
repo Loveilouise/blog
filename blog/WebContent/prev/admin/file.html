@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>文件管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta content="Coderthemes" name="author"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="shortcut icon" href="../static/image/logo.png"/>
+    <link href="../vendor/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="../vendor/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.4.1/sweetalert2.min.css" rel="stylesheet"/>
+    <link href="https://cdn.bootcss.com/dropzone/4.3.0/min/dropzone.min.css" rel="stylesheet">
+</head>
+<style>
+
+    #images_list {
+        margin-top: 20px;
+    }
+
+    .attach-img {
+        width: 100px;
+        height: 100px;
+
+    }
+
+    .attach-text {
+        font-size: 12px;
+        font-weight: 300;
+    }
+
+    .attach-img:hover {
+        background-color: #f9f9f9;
+    }
+</style>
+<body class="fixed-left">
+<div id="wrapper">
+    <!--头部和左边菜单-->
+    <div>
+        <div class="topbar">
+            <div class="topbar-left">
+                <div class="text-center p-t-10" style="margin: 0 auto;">
+                    <div class="pull-left" style="padding-left: 10px;">
+                        <a href="index.html">
+                            <img src="../static/image/logo.png" width="50" height="50"/>
+                        </a>
+                    </div>
+                    <div class="pull-left" style="padding-left: 10px;">
+                        <span style="font-size: 20px; color: #2f353f; line-height: 50px;">我的博客</span>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar navbar-default" role="navigation">
+                <div class="container">
+                    <div class="">
+                        <div class="pull-left">
+                            <button type="button" class="button-menu-mobile open-left">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <span class="clearfix"></span>
+                        </div>
+
+                        <ul class="nav navbar-nav navbar-right pull-right">
+                            <li class="dropdown">
+                                <a href="/admin/index.html" class="dropdown-toggle profile" data-toggle="dropdown"
+                                   aria-expanded="true">
+                                    <span class="glyphicon glyphicon-user"/>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="javascript:void(0);" onclick="logout()"><i class="fa fa-sign-out"></i> 注销</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="left side-menu">
+            <div class="sidebar-inner slimscrollleft">
+                <div id="sidebar-menu">
+                    <ul>
+                        <li>
+                            <a id="index" href="index.html" class="waves-effect">
+                                <i class="fa fa-dashboard" aria-hidden="true"></i>
+                                <span> 仪表盘 </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a id="article_edit" href="article_edit.html?type=newArticle" class="waves-effect">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                <span> 发布文章 </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="article_list.html" class="waves-effect">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                                <span> 文章管理 </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="comment_list.html" class="waves-effect">
+                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                <span> 评论管理 </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="category.html" class="waves-effect">
+                                <i class="fa fa-tags" aria-hidden="true"></i>
+                                <span> 分类/标签 </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="file.html" class="waves-effect active">
+                                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                                <span> 文件管理 </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                                <div class="form-inline">
+                                    <input type="file" id="file" class="form-control" name="fileName"
+                                           placeholder="请选择文件">
+                                    <input type="button" class="btn btn-success" onclick="fileUpload()" value="上传文件">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-12">
+                            <div id="images_list">
+                                <div class="col-md-2 text-center">
+                                    <a href="#" target="_blank">
+                                        <img class="attach-img" src=""/>
+                                    </a>
+                                    <div class="clearfix m-t-10">
+                                        <span class="attach-text" data-toggle="tooltip" data-placement="top">图片标题</span>
+                                    </div>
+                                    <div class="clearfix">
+                                        <button type="button"
+                                                class="btn btn-warning btn-sm waves-effect waves-light copy">
+                                            <i class="fa fa-copy"></i> <span>复制</span>
+                                        </button>
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm waves-effect waves-light"
+                                                onclick="'delAttach('+${attach.id}+');'">
+                                            <i class="fa fa-trash-o"></i> <span>删除</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                       <!--  <nav class="pull-right">
+                            <ul class="pagination" id="paging_toolbar">
+                                <li><a href="#" aria-label="Previous"><span aria-hidden="true">上一页</span></a></li>
+                                <li class="active"><a href="#">1<span class="sr-only">(current)</span></a></li>
+                                <li class=""><a href="#">2<span class="sr-only">(current)</span></a></li>
+                                <li class=""><a href="#">3<span class="sr-only">(current)</span></a></li>
+                                <li class=""><a href="#">4<span class="sr-only">(current)</span></a></li>
+                                <li class=""><a href="#">5<span class="sr-only">(current)</span></a></li>
+                                <li class="disabled"><a href="#" aria-label="Previous"><span
+                                        aria-hidden="true">下一页</span></a></li>
+                            </ul>
+                        </nav> -->
+                    </div>
+
+                </div>
+                <!--页脚-->
+                <div>
+                    <footer class="footer text-right">
+                        2019 © <a href="#" target="_blank">我的博客</a>
+                        <div class=""></div>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--所有页面必须导入start-->
+<script src="https://cdn.bootcss.com/jquery/2.2.3/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.4.1/sweetalert2.min.js"></script>
+<script src="../vendor/jquery.app.js"></script>
+<script src="../vendor/base.js"></script>
+<!--所有页面必须导入end-->
+<script src="https://cdn.bootcss.com/dropzone/4.3.0/min/dropzone.min.js"></script>
+<script src="https://cdn.bootcss.com/clipboard.js/1.6.0/clipboard.min.js"></script>
+<script type="text/javascript">
+
+   $(function (){
+        $.ajax({
+            url: "/blog/getFileList.do",
+            type: 'post',
+            data: "{currentPage:1}",
+            success: function (result) {
+                if (result.code =="200") {
+                    var divTxt = "";
+                    var $images_list = $("#images_list");
+                    for (var i = 0; i < result.data.length; i++) {
+                        var file = result.data[i];
+                        divTxt += "<div class=\"col-md-2 text-center\">\n" +
+                            "                                    <a href=\"#\" target=\"_blank\">\n" +
+                            "                                        <img class=\"attach-img\" src='" + file.hash + "'/>\n" +
+                            "                                    </a>\n" +
+                            "                                    <div class=\"clearfix m-t-10\">\n" +
+                            "                                        <span class=\"attach-text\" data-toggle=\"tooltip\" data-placement=\"top\">"+file.keyname+"</span>\n" +
+                            "                                    </div>\n" +
+                            "                                    <div class=\"clearfix\">\n" +
+                            "                                        <button type=\"button\" url='" + file.hash + "' class=\"btn btn-warning btn-sm waves-effect waves-light copy\">\n" +
+                            "                                            <i class=\"fa fa-copy\"></i> <span>复制</span>\n" +
+                            "                                        </button>\n" +
+                            "                                        <button type=\"button\" class=\"btn btn-danger btn-sm waves-effect waves-light\"\n" +
+                            "                                                onclick='deleteFile(" + file.upload_id + ")'>\n" +
+                            "                                            <i class=\"fa fa-trash-o\"></i> <span>删除</span>\n" +
+                            "                                        </button>\n" +
+                            "                                    </div>\n" +
+                            "                                </div>";
+                    }
+                    $images_list.html(divTxt);
+                } else {
+                }
+            }
+        });
+    }); 
+
+
+    var tale = new $.tale();
+
+    $("#dropzone").dropzone({
+        paramName: "file",
+        url: "/admin/attach/upload",
+        maxFilesize: 1,
+        init: function () {
+            this.on("success", function (file, msg) {
+                console.log(file);
+                if (msg.success !== true) {
+                    tale.alertError('上传文件大于1M');
+                }
+                setTimeout(function () {
+                    window.location.reload();
+                }, 200);
+            });
+        }
+    });
+    var clipboard = new Clipboard('button.copy', {
+        text: function (trigger) {
+            return $(trigger).attr('url');
+        }
+    });
+
+    clipboard.on('success', function (e) {
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        e.clearSelection();
+    });
+
+    function deleteFile(fid) {
+        tale.alertConfirm({
+            title: '确定删除该附件吗?',
+            then: function () {
+                $.post("/blog/deleteFile.do", "fid=" + fid, function (result) {
+                    if (result.code =="200") {
+                        tale.alertOkAndReload('附件删除成功');
+                    } else {
+                        tale.alertError(result.msg || '附件删除失败');
+                    }
+                }, "json");
+            }
+        });
+    }
+
+    function fileUpload() {
+    	 
+        //1创建一个formData对象
+        var formData = new FormData();
+        //2获取传入元素的val
+        var name = $("#file").val();
+        
+       // $("#file")[0].files)用于获取文件对象
+        //3获取files
+     //   if ($("#file")[0].length > 0) {
+            var files = $("#file")[0].files[0];
+            //4将name 和 files 添加到formData中，键值对形式
+            console.log(files);
+            formData.append("file", files);
+            formData.append("name", name);
+            $.ajax({
+                url: "/blog/fileUpload.do",
+                type: 'post',
+                data: formData,
+                processData: false,// ⑧告诉jQuery不要去处理发送的数据
+                contentType: false, // ⑨告诉jQuery不要去设置Content-Type请求头
+                success: function (result) {
+                    if (result.code =="200") {
+                        tale.alertOkAndReload('上传成功成功');
+                    } else {
+                        tale.alertError(result.msg || '附件上传失败');
+                    }
+                }
+            });
+      //  }
+    }
+    function   logout(){
+     	 $.get(getRootPath()+"/logout.do", function (result) {
+     		 if(result.code=="200"){
+     			 alert("注销成功");
+     			 window.location.href=getRootPath()+"/prev/admin/login.html";
+     		 }else{
+     			 alert("注销失败");
+     		 }
+     		
+     		 
+     	 });
+     }
+
+</script>
+</body>
+</html>

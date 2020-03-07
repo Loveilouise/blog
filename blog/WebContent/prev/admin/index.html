@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>管理中心</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta content="Coderthemes" name="author"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="shortcut icon" href="../static/image/logo.png"/>
+    <link href="../vendor/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="../vendor/css/style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="wrapper">
+    <!--头部和左边菜单-->
+    <div>
+        <div class="topbar">
+            <div class="topbar-left">
+                <div class="text-center p-t-10" style="margin: 0 auto;">
+                    <div class="pull-left" style="padding-left: 10px;">
+                        <a href="index.html">
+                            <img src="../static/image/logo.png" width="50" height="50"/>
+                        </a>
+                    </div>
+                    <div class="pull-left" style="padding-left: 10px;">
+                        <span style="font-size: 20px; color: #2f353f; line-height: 50px;">我的博客</span>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar navbar-default" role="navigation">
+                <div class="container">
+                    <div class="">
+                        <div class="pull-left">
+                            <button type="button" class="button-menu-mobile open-left">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <span class="clearfix"></span>
+                        </div>
+
+                        <ul class="nav navbar-nav navbar-right pull-right">
+                            <li class="dropdown">
+                                <a href="/admin/index.html" class="dropdown-toggle profile" data-toggle="dropdown"
+                                   aria-expanded="true">
+                                    <span class="glyphicon glyphicon-user"/>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="javascript:void(0);" onclick="logout()"><i class="fa fa-sign-out"></i> 注销</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="left side-menu">
+            <div class="sidebar-inner slimscrollleft">
+                <div id="sidebar-menu">
+                    <ul>
+                        <li>
+                            <a id="index" href="index.html" class="waves-effect active">
+                                <i class="fa fa-dashboard" aria-hidden="true"></i>
+                                <span> 仪表盘 </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a id="article_edit" href="article_edit.html?type=newArticle" class="waves-effect">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                <span> 发布文章 </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="article_list.html" class="waves-effect">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                                <span> 文章管理 </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="comment_list.html" class="waves-effect">
+                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                <span> 评论管理 </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="category.html" class="waves-effect">
+                                <i class="fa fa-tags" aria-hidden="true"></i>
+                                <span> 分类/标签 </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="file.html" class="waves-effect">
+                                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                                <span> 文件管理 </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="mini-stat clearfix bx-shadow bg-info">
+                                <span class="mini-stat-icon"><i class="fa fa-quote-right" aria-hidden="true"></i></span>
+                                <div class="mini-stat-info text-right">
+                                    发表了<span class="counter" id="articleCount"></span>篇文章
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="mini-stat clearfix bg-purple bx-shadow">
+                                <span class="mini-stat-icon"><i class="fa fa-comments-o" aria-hidden="true"></i></span>
+                                <div class="mini-stat-info text-right">
+                                    收到了<span class="counter" id="commentCount"></span>条留言
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="mini-stat clearfix bg-success bx-shadow">
+                                <span class="mini-stat-icon"><i class="fa fa-cloud-upload"
+                                                                aria-hidden="true"></i></span>
+                                <div class="mini-stat-info text-right">
+                                    上传了<span class="counter" id="attachesCount"></span>个附件
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">最新文章</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <ul class="list-group" id="new_article">
+                                        <li class="list-group-item">
+                                            <a target="_blank" href="#">我的学习之路</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">最新评论</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div>
+                                        <div id="not_comment" class="alert alert-warning">
+                                            还没有收到评论.
+                                        </div>
+                                    </div>
+                                    <ul id="comment_ul" class="list-group">
+                                        <li class="list-group-item">
+                                            <div><a href="login.html" target="_blank">我是程序员</a>
+                                            </div>
+                                            评论于：<span>2019年4月20日14:04:53</span><br/>
+                                            <a href="#" target="_blank">好文章，支持！！！</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--页脚-->
+                <div>
+                    <footer class="footer text-right">
+                        2019 © <a href="#" target="_blank">Blog</a>
+                        <div class=""></div>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/jquery.app.js"></script>
+<script src="../vendor/base.js"></script>
+
+<script>
+    $(function () {
+        //显示统计数据
+        $.get(getRootPath()+"/dashbord.do", function (result) {
+            //发表文章个数
+            $("#articleCount").text(result.data.acounts);
+           
+            //评论个数
+            $("#commentCount").text(result.data.ccounts);            
+            //附件个数
+            $("#attachesCount").text(result.data.fcounts);            
+
+            //判断是否有最新评论
+            if (result.data.clist.length > 0) {
+                //最新评论
+                var commentListTxt = "";
+                for (var i = 0; i < result.data.clist.length; i++) {
+                    var comment = result.data.clist[i];
+                    commentListTxt += "<li class=\"list-group-item\">\n" +
+                        "<div> <a href=\"#\" target=\"_blank\" >" + comment.author + "</a>\n" +
+                        "</div>\n" +
+                        "评论于：<span>" + comment.created + "</span><br/>\n" +
+                        "<a href=\"#\" target=\"_blank\">" + comment.content + "</a>\n" +
+                        "</li>";
+                }
+                $("#comment_ul").html(commentListTxt);
+                $("#not_comment").remove();
+            } else {
+                //没有最新评论删除掉评论布局
+                $("#comment_ul").remove();
+            }
+
+            //最新文章
+            var articleListTxt = "";
+            for (var i = 0; i < result.data.alist.length; i++) {
+                var article = result.data.alist[i];
+                //alert(article.aid);
+                articleListTxt += "<li class=\"list-group-item\">\n" +
+                    "<a target=\"_blank\" href='" +getRootPath()+"/prev/admin/post2.html?aid=" + article.aid + "'>" + article.title + "</a>\n" +
+                    "</li>";
+            }
+            $("#new_article").html(articleListTxt);
+        });
+    });
+    
+    
+    function   logout(){
+    	 $.get("../logout.do", function (result) {
+    		 if(result.code=="200"){
+    			 alert("注销成功");
+    			 window.location.href=getRootPath()+"/admin/login.html";
+    		 }else{
+    			 alert("注销失败");
+    		 }
+    		
+    		 
+    	 });
+    }
+    
+    
+    
+    
+    
+</script>
+
+
+</body>
+</html>

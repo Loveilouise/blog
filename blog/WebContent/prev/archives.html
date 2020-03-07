@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"/>
+    <meta name="renderer" content="webkit"/>
+    <link rel="shortcut icon" href="./static/image/logo.png"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>归档</title>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./static/user/css/style.css" rel="stylesheet"/>
+    <style>
+        body {
+            background: #f7f7f7;
+        }
+    </style>
+</head>
+
+<body>
+
+<header id="header" class="header bg-white">
+    <div class="navbar-container">
+        <a href="index.html" class="navbar-logo">
+            <img src="./static/image/logo.png" alt="首页"/>
+        </a>
+        <div class="navbar-menu">
+            <a href="archives.html">归档</a>
+            <a href="about.html">关于</a>
+        </div>
+    </div>
+</header>
+
+<div class="container main-content archive-page clearfix text-center" id="archive_list">
+    <div class="categorys-item">
+        <div class="categorys-title">2019年4月25日13:23:28</div>
+        <div class="post-lists">
+            <div class="post-lists-body">
+                <div class="post-list-item">
+                    <div class="post-list-item-container">
+                        <div class="item-label">
+                            <div class="item-title">
+                                <a href="">我是标题</a>
+                            </div>
+                            <div class="item-meta clearfix text-right">
+                                <div class="item-meta-date">发布于 2019年4月25日11:00:47</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer bg-white">
+    <div class="footer-meta">
+        <div class="footer-container">
+            <div class="meta-item meta-copyright">
+                <div class="meta-copyright-info">
+                    <div class="info-text">
+                        <p>
+                            &copy; 版权所有
+                            <a href="#" target="_blank" rel="nofollow">我的博客</a>
+                            保留一切权利
+                        </p>
+                        <br/>
+                        <p>备1111号</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+
+<script src="./vendor/jquery/jquery.min.js"></script>
+<script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="./vendor/base.js"></script>
+<script>
+
+    $(function () {
+        $.get( "archives.do", function (result) {
+            if (result.code =="200") {
+                var archives_ListTxt = "";
+                for (var i = 0; i < result.data.length; i++) {
+                    // 某个归档信息
+                    var archive = result.data[i];
+                    archives_ListTxt += "<div class=\"categorys-item text-left\"><div class=\"categorys-title\">" + archive.date + "</div><div class=\"post-lists\">";
+                    for (var j = 0; j < archive.list.length; j++) {
+                        // 某个归档下的所有文章
+                        var article = archive.list[j];
+                        archives_ListTxt += "<div class=\"post-lists-body\">\n" +
+                            "                <div class=\"post-list-item\">\n" +
+                            "                    <div class=\"post-list-item-container\">\n" +
+                            "                        <div class=\"item-label\">\n" +
+                            "                            <div class=\"item-title\">\n" +
+                            "                                <a href='post.html?aid=" + article.aid + "'>" + article.title + "</a>\n" +
+                            "                            </div>\n" +
+                            "                            <div class=\"item-meta clearfix text-right\">\n" +
+                            "                                <div class=\"item-meta-date text-left\">发布于：" + article.created  + "</div>\n" +
+                            "                            </div>\n" +
+                            "                        </div>\n" +
+                            "                    </div>\n" +
+                            "                </div>\n" +
+                            "            </div>";
+                    }
+                    archives_ListTxt += "</div></div></div>";
+                }
+                $("#archive_list").html(archives_ListTxt);
+            }
+        });
+    });
+
+
+</script>
+
+</body>
+
+</html>
